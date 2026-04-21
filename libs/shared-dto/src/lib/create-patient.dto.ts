@@ -1,13 +1,19 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreatePatientDto {
-  @ApiProperty({ example: '12345678', description: 'Número de identificación' })
+  @ApiProperty({
+    description: 'Número de identificación único del paciente',
+    example: '10203040',
+  })
   @IsString()
   @IsNotEmpty()
   cedula: string;
 
-  @ApiProperty({ example: 'andres@example.com', description: 'Correo para recibir claves temporales' })
+  @ApiProperty({
+    description: 'Correo electrónico para envío de claves temporales',
+    example: 'paciente@correo.com',
+  })
   @IsEmail()
   @IsNotEmpty()
   email: string;
