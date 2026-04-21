@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@medical/shared-dto": ["libs/shared-dto/src/index.ts"],
+      "@medical/auth-guard": ["libs/auth-guard/src/index.ts"],
+      "@medical/database": ["libs/database/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
