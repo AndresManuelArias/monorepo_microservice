@@ -1,0 +1,17 @@
+{
+  "name": "document-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "implicitDependencies": ["document"],
+  "targets": {
+    "e2e": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{e2eProjectRoot}"],
+      "options": {
+        "jestConfig": "apps/document-e2e/jest.config.cts",
+        "passWithNoTests": true
+      },
+      "dependsOn": ["document:build", "document:serve"]
+    }
+  }
+}
