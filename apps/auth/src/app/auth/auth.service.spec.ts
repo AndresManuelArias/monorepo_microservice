@@ -65,6 +65,8 @@ describe('AuthService', () => {
       mockRepository.findOne.mockResolvedValue(patientWithEmail);
       mockRepository.save.mockResolvedValue(patientWithEmail);
 
+      jest.spyOn(service as any, 'sendMockEmail').mockResolvedValue('https://ethereal.email/mock');
+
       const result = await service.requestPassword('12345678');
 
       expect(mockRepository.findOne).toHaveBeenCalledWith({ where: { cedula: '12345678' } });
@@ -75,6 +77,8 @@ describe('AuthService', () => {
     it('should save temp password with 15 minute expiry', async () => {
       const patientWithEmail = { ...mockPatient, email: 'test@test.com' };
       mockRepository.findOne.mockResolvedValue(patientWithEmail);
+      
+      jest.spyOn(service as any, 'sendMockEmail').mockResolvedValue('https://ethereal.email/mock');
       
       let savedPatient: any;
       mockRepository.save.mockImplementation((patient) => {

@@ -57,15 +57,20 @@ describe('PatientsService', () => {
       };
       mockRepository.findOne.mockResolvedValue(null);
       
-      const createdPatient = { id: 'new-uuid', ...createDto, passwordHash: 'hashed' };
-      mockRepository.create.mockReturnValue(createdPatient);
-      mockRepository.save.mockResolvedValue(createdPatient);
+      const savedPatient = { id: 'new-uuid', cedula: '12345678', email: 'test@test.com' };
+      mockRepository.create.mockImplementation((data) => data);
+      mockRepository.save.mockResolvedValue(savedPatient);
 
       const result = await service.create(createDto);
 
       expect(mockRepository.create).toHaveBeenCalled();
       expect(mockRepository.save).toHaveBeenCalled();
-      expect(result).toEqual(createdPatient);
+      // El servicio retorna un objeto sin passwordHash
+      expect(result).toEqual(expect.objectContaining({
+        id: 'new-uuid',
+        cedula: '12345678',
+        email: 'test@test.com',
+      }));
     });
 
     it('should hash password using bcrypt', async () => {
