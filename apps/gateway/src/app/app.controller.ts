@@ -5,6 +5,7 @@ import { RequestPasswordDto, LoginDto } from '@medical/shared-dto';
 import { JwtAuthGuard } from '@medical/auth-guard';
 
 @ApiTags('Gateway')
+@ApiBearerAuth('access-token')
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}

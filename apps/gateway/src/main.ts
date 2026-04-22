@@ -18,6 +18,17 @@ async function bootstrap() {
     .setDescription('API Gateway for handling requests')
     .addTag('Gateway')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Ingrese el token JWT obtenido del microservicio de Auth',
+        in: 'header',
+      },
+      'access-token',
+    )
     .build();
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerOptions);
   SwaggerModule.setup('docs', app, swaggerDocument);
