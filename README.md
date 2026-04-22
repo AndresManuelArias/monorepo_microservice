@@ -24,37 +24,34 @@ document
 
 
 
-# Resumen de Decisiones Técnicas - Sistema de Gestión Médica
+# Decisiones Técnicas y Arquitectura - Sistema de Gestión Médica
+
+Este documento resume los pilares técnicos sobre los cuales construí la solución, priorizando la escalabilidad, el desacoplamiento y la seguridad de la información sensible.
 
 ## 1. Arquitectura de Microservicios con Nx Monorepo
-Se seleccionó **Nx** para gestionar el proyecto como un monorepo. Esta decisión permite:
-* **Código compartido:** Uso de librerías comunes (`shared-dto`, `auth-guard`, `database`) para garantizar la consistencia de los datos.
-* **Escalabilidad:** Cada microservicio (`auth`, `document`, `gateway`) puede escalar de forma independiente según la carga.
+Para la gestión del proyecto, opté por un **monorepo utilizando Nx**. Esta decisión no fue solo por organización, sino por eficiencia técnica:
+* **Librerías Compartidas:** Centralicé la lógica común en librerías (`shared-dto`, `auth-guard`, `database`). Esto garantiza que todos los microservicios sigan las mismas reglas de negocio sin duplicar código.
+* **Escalabilidad Independiente:** Dividí el dominio en servicios específicos (`auth`, `document`, `gateway`). Esto permite que cada módulo crezca o se despliegue según sus propias necesidades de carga.
 
-<img src="./uml/image.png" alt="MDN" />
+<img src="./uml/image.png" alt="Arquitectura del Sistema" />
 
-## 2. Implementación de BFF (Backend For Frontend)
-El **Gateway** actúa como un punto de entrada único.
-* **Simplificación para el cliente:** El frontend solo conoce una URL.
-* **Seguridad:** El Gateway valida los tokens JWT antes de permitir que la petición llegue a los microservicios internos.
+## 2. Backend For Frontend (BFF) vía Gateway
+Implementé un **Gateway** como punto único de entrada para el frontend.
+* **Simplicidad en el Cliente:** El frontend no necesita conocer la topología de la red interna; solo interactúa con una URL.
+* **Seguridad Perimetral:** El Gateway actúa como primer filtro, validando los tokens JWT y protegiendo los microservicios internos de peticiones no autorizadas.
 
-## 3. Almacenamiento Seguro con MinIO (S3)
-En lugar de almacenar archivos en el sistema de archivos local, se optó por un **Object Storage**.
-* **URLs Firmadas:** Se cumple el requisito 3.3 mediante la generación de URLs temporales que expiran en 5 minutos, garantizando que los documentos clínicos nunca sean públicos.
-* **Desacoplamiento:** Los archivos están separados de la base de datos de metadatos.
+## 3. Gestión de Archivos con MinIO (S3)
+En lugar de depender del sistema de archivos local, decidí implementar **Object Storage con MinIO**.
+* **Privacidad por Diseño (Requisito 3.3):** Implementé el uso de **URLs Firmadas**. Los documentos clínicos nunca son públicos; el sistema genera un acceso temporal que expira en 5 minutos.
+* **Persistencia Desacoplada:** Esto separa los metadatos de los archivos físicos, facilitando migraciones y copias de seguridad.
 
-## 4. Seguridad y Validación de Datos
-* **Hashing con Bcrypt:** Las contraseñas (incluyendo las temporales) nunca se guardan en texto plano.
-* **Validación en múltiples capas:**
-    * **DTOs:** Uso de `class-validator` y `class-transformer` para validar tipos de datos en la entrada.
-    * **Enums:** Implementación de tipos estrictos para documentos (`Concepto médico`, `Paraclínicos`, `Exámenes complementarios`) para evitar datos basura.
-* **Validación de Propiedad:** El sistema verifica que el `patient_id` del token JWT coincida con el dueño del documento solicitado antes de permitir la descarga.
-
-## 5. Base de Datos Relacional (PostgreSQL)
-Se utilizó PostgreSQL debido a su robustez y soporte para tipos de datos complejos:
-* **UUID:** Uso de identificadores universales únicos para evitar la enumeración de recursos.
-* **JSONB:** El campo `metadata` de los documentos utiliza JSON binario para permitir flexibilidad en los datos clínicos sin sacrificar rendimiento.
-
+## 4. Seguridad e Integridad de Datos
+La seguridad es el eje central, considerando que manejamos datos médicos:
+* **Hashing Robusto:** Uso de **Bcrypt** para asegurar que ninguna credencial se almacene en texto plano.
+* **Validación de Capas:**
+    * **Tipado Estricto:** Uso de `class-validator` y `class-transformer` en los DTOs para asegurar que solo entre data limpia al sistema.
+    * **Enums Médicos:** Definición de tipos estrictos para documentos (`Concepto médico`, `Paraclínicos`, etc.) para evitar inconsistencias.
+* **Validación de Propiedad:** El sistema no solo verifica que el usuario esté logueado, sino
 # Medical
 
 <a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
