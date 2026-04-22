@@ -3,19 +3,37 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 describe('AppController', () => {
-  let app: TestingModule;
+  let controller: AppController;
+  let service: AppService;
 
-  beforeAll(async () => {
-    app = await Test.createTestingModule({
+  const mockAppService = {
+    getData: jest.fn(),
+  };
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
-      providers: [AppService],
+      providers: [
+        {
+          provide: AppService,
+          useValue: mockAppService,
+        },
+      ],
     }).compile();
+
+    controller = module.get<AppController>(AppController);
+    service = module.get<AppService>(AppService);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   describe('getData', () => {
-    it('should return "Hello API"', () => {
-      const appController = app.get<AppController>(AppController);
-      expect(appController.getData()).toEqual({ message: 'Hello API' });
+    it('should return hello message from service', () => {
+      mockAppService.getData.mockReturnValue({ message: 'Hello API' });
+      expect(controller.getData()).toEqual({ message: 'Hello API' });
+      expect(mockAppService.getData).toHaveBeenCalled();
     });
   });
 });

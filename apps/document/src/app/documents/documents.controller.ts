@@ -81,7 +81,7 @@ export class DocumentsController {
           description: 'Archivo PDF del examen o concepto médico',
         },
         patient_id: { type: 'string', description: 'UUID del paciente' },
-        type: { type: 'string', description: 'Tipo de documento (ej: Paraclínico)', example: 'Examen de Sangre' },
+        type: { type: 'string', description: 'Tipo de documento (ej: Paraclínico)', example: 'Paraclínico' },
         metadata: { 
           type: 'string', 
           description: 'JSON con información extra', 
