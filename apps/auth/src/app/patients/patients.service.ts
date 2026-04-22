@@ -35,4 +35,9 @@ export class PatientsService {
 
     return await this.patientRepository.save(newPatient);
   }
+  async findAll(): Promise<Patient[]> {
+  return await this.patientRepository.find({
+    select: ['id', 'cedula', 'email', 'createdAt'],
+  });
+}
 }
