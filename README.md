@@ -8,6 +8,7 @@ docker compose up -d
 ## Run proyect
 ```sh
 cd medical
+npm install
 npx nx run-many --target=serve
 ```
 
