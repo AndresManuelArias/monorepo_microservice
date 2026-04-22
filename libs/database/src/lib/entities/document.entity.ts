@@ -8,7 +8,11 @@ export class ClinicalDocument {
   @Column({ type: 'uuid' })
   patient_id: string;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: DocumentType,
+    default: DocumentType.PARACLINICOS, // Opcional: valor por defecto
+  })
   type: string; 
 
   @Column()
