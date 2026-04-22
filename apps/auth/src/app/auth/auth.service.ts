@@ -84,7 +84,7 @@ export class AuthService {
       throw new UnauthorizedException('Credenciales inválidas');
     }
 
-    // 2. Verificar si existe una clave temporal y si no ha expirado
+
     if (!patient.tempPasswordHash || !patient.tempPasswordExpiry) {
       throw new UnauthorizedException('No hay una clave temporal activa');
     }
@@ -94,13 +94,13 @@ export class AuthService {
       throw new UnauthorizedException('La clave temporal ha expirado');
     }
 
-    // 3. Comparar la contraseña ingresada con el hash temporal
+
     const isMatch = await bcrypt.compare(password, patient.tempPasswordHash);
     if (!isMatch) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
 
-    // 4. Generar el JWT Payload
+
     const payload = { 
       sub: patient.id, 
       email: patient.email, 
