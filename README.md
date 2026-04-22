@@ -10,8 +10,8 @@ nvm use 22
 ## Create docker
 ```sh
 cd monorepo_microservice
+docker compose down
 docker compose up -d
-docker start medical_db
 ```
 
 ## Run proyect
