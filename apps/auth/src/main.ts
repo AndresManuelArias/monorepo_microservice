@@ -5,7 +5,7 @@
 
 import { Logger,ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'; // Importa Swagger
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
@@ -22,9 +22,9 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document); // La URL será /api/docs
+  SwaggerModule.setup('docs', app, document);
 
-  // 2. Habilitar validaciones globales (para que funcionen los DTOs)
+
   app.useGlobalPipes(new ValidationPipe());
   const port = process.env.PORT || 3001;
   await app.listen(port);
