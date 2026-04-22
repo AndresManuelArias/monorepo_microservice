@@ -12,22 +12,10 @@ export class DocumentsController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        file: { type: 'string', format: 'binary' },
-        patient_id: { type: 'string' },
-        type: { type: 'string' },
-        metadata: { type: 'string' }
-      },
-    },
-  })
   async uploadDocument(
     @Body() body: CreateDocumentDto,
     @UploadedFile() file: Express.Multer.File
   ) {
-    const fileName = `${Date.now()}-${file.originalname}`;
-    return this.documentsService.create(body, fileName);
+    return this.documentsService.uploadAndCreate(body, file);
   }
 }
