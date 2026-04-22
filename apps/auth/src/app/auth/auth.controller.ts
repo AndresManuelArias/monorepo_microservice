@@ -1,6 +1,6 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { RequestPasswordDto } from '@medical/shared-dto'; // Importa tu DTO
+import { RequestPasswordDto } from '@medical/shared-dto';
 import { AuthService } from './auth.service';
 
 @ApiTags('Auth')
