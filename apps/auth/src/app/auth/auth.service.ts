@@ -37,7 +37,7 @@ export class AuthService {
     const info = await this.sendMockEmail(patient.email, tempPassword);
 
     return { 
-      message: 'Si el usuario existe, se ha enviado una clave temporal a su correo electrónico institucional.'+ info
+      message: 'Si el usuario existe, se ha enviado una clave temporal a su correo electrónico institucional.\n ingresa al siguiente enlace para acceder: ' + info
     };
   }
 
