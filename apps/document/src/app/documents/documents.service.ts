@@ -69,5 +69,15 @@ export class DocumentsService {
       throw new InternalServerErrorException('No se pudo procesar el documento');
     }
   }
-
+  async findAllByPatient(patientId: string): Promise<ClinicalDocument[]> {
+    return await this.documentRepo.find({
+      where: { 
+        patient_id: patientId,
+        state: 'active' 
+      },
+      order: {
+        created_at: 'DESC'
+      }
+    });
+  }
 }

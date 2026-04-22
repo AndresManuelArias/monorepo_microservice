@@ -12,12 +12,30 @@ import {
 import { DocumentsService } from './documents.service';
 import { CreateDocumentDto } from '@medical/shared-dto';
 import { AuthGuard } from '@nestjs/passport/dist/auth.guard';
+import { ClinicalDocument } from 'libs/database/src/lib/entities/document.entity';
+import { JwtAuthGuard } from '@medical/auth-guard';
 
 @ApiTags('Documents')
 @ApiBearerAuth()
 @Controller('documents')
 export class DocumentsController {
   constructor(private readonly documentsService: DocumentsService) {}
+
+  @Get()
+  @UseGuards(AuthGuard('jwt'))
+  @ApiOperation({ 
+    summary: 'Listar documentos del paciente autenticado',
+    description: 'Retorna todos los documentos asociados al paciente extraído del token JWT.' 
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Lista de documentos obtenida exitosamente.',
+    type: [ClinicalDocument] 
+  })
+  async findAll(@Request() req) {
+    const patientId = req.user.sub;
+    return this.documentsService.findAllByPatient(patientId);
+  }
 
   @UseGuards(AuthGuard('jwt'))
   @Get(':id/download')
@@ -34,6 +52,7 @@ export class DocumentsController {
     return this.documentsService.getSecureDownloadUrl(id, req.user.sub);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
