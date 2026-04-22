@@ -11,10 +11,12 @@ import { AppModule } from './app/app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api-gateway';
+  app.setGlobalPrefix(globalPrefix);
 
   const swaggerOptions = new DocumentBuilder()
     .setTitle('API Gateway')
     .setDescription('API Gateway for handling requests')
+    .addTag('Gateway')
     .setVersion('1.0')
     .build();
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerOptions);

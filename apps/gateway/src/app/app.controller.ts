@@ -9,13 +9,13 @@ import { JwtAuthGuard } from '@medical/auth-guard';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  // Health check
+
   @Get()
   getData() {
     return { message: 'Gateway API - Medical Microservices' };
   }
 
-  // Auth endpoints
+
   @Post('auth/request-password')
   @ApiOperation({ summary: 'Solicitar clave temporal mediante cédula' })
   @ApiResponse({ status: 200, description: 'Clave temporal enviada exitosamente.' })
@@ -32,7 +32,7 @@ export class AppController {
     return this.appService.login(dto);
   }
 
-  // Document endpoints
+
   @Get('documents')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
