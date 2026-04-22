@@ -1,8 +1,17 @@
 
+## Requeriment
+use nvm
+```sh
+nvm install 22
+nvm use 22
+
+```
+
 ## Create docker
 ```sh
 cd monorepo_microservice
 docker compose up -d
+docker start medical_db
 ```
 
 ## Run proyect
