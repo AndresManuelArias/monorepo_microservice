@@ -11,6 +11,7 @@ import {
 } from '@nestjs/swagger';
 import { DocumentsService } from './documents.service';
 import { CreateDocumentDto } from '@medical/shared-dto';
+import { AuthGuard } from '@nestjs/passport/dist/auth.guard';
 
 @ApiTags('Documents')
 @ApiBearerAuth()
@@ -18,6 +19,7 @@ import { CreateDocumentDto } from '@medical/shared-dto';
 export class DocumentsController {
   constructor(private readonly documentsService: DocumentsService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Get(':id/download')
   @ApiOperation({ 
     summary: 'Obtener URL segura de descarga', 
@@ -28,6 +30,7 @@ export class DocumentsController {
   @ApiResponse({ status: 403, description: 'Acceso denegado: El documento no pertenece al paciente autenticado.' })
   @ApiResponse({ status: 404, description: 'Documento no encontrado.' })
   async download(@Param('id') id: string, @Request() req) {
+    console.log(req.user);
     return this.documentsService.getSecureDownloadUrl(id, req.user.sub);
   }
 

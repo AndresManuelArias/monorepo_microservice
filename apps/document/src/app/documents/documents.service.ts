@@ -39,7 +39,7 @@ export class DocumentsService {
       Key: doc.file_url,
     });
 
-    const url = await getSignedUrl(this.s3Client, command, { expiresIn: 300 }); // Expira en 5 min
+    const url = await getSignedUrl(this.s3Client, command, { expiresIn: 300 });
     return { download_url: url };
   }
   async uploadAndCreate(dto: CreateDocumentDto, file: Express.Multer.File) {
@@ -69,12 +69,5 @@ export class DocumentsService {
       throw new InternalServerErrorException('No se pudo procesar el documento');
     }
   }
-  async create(dto: CreateDocumentDto, fileName: string) {
-    const newDoc = this.documentRepo.create({
-      ...dto,
-      file_url: fileName, 
-      state: 'active',
-    });
-    return await this.documentRepo.save(newDoc);
-  }
+
 }

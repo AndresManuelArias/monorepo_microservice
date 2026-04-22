@@ -7,10 +7,14 @@ import { DocumentsController } from './documents/documents.controller';
 import { DocumentsService } from './documents/documents.service';
 import { ConfigModule } from '@nestjs/config/dist/config.module';
 import { ConfigService } from '@nestjs/config/dist/config.service';
-import { JwtModule } from '@nestjs/jwt/dist/jwt.module';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from './auth/jwt.strategy';
 
 @Module({
   imports: [
+    PassportModule,
+    JwtModule.register({}),
     ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
     TypeOrmModule.forFeature([ClinicalDocument]),
@@ -22,8 +26,9 @@ import { JwtModule } from '@nestjs/jwt/dist/jwt.module';
         signOptions: { expiresIn: '1h' },
       }),
     }),
+
   ],
   controllers: [AppController,DocumentsController],
-  providers: [AppService,DocumentsService],
+  providers: [AppService,DocumentsService,JwtStrategy],
 })
 export class AppModule {}
