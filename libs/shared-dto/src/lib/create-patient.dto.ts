@@ -17,4 +17,13 @@ export class CreatePatientDto {
   @IsEmail()
   @IsNotEmpty()
   email: string;
+
+
+  @ApiProperty({
+    description: 'Password para el paciente',
+    example: 'password123',
+  })
+  @IsString()
+  @IsNotEmpty()
+  password: string;
 }
