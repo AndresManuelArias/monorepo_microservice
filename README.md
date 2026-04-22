@@ -112,7 +112,7 @@ cd medical
 npx nx run-many --target=serve
 ```
 
-##swagger documentation
+## swagger documentation
 
 gateway
 <a href="http://localhost:3000/docs"> http://localhost:3000/docs </a>
@@ -122,3 +122,36 @@ auth
 
 document
 <a href="http://localhost:3002/docs"> http://localhost:3002/docs </a>
+
+
+
+# Resumen de Decisiones Técnicas - Sistema de Gestión Médica
+
+## 1. Arquitectura de Microservicios con Nx Monorepo
+Se seleccionó **Nx** para gestionar el proyecto como un monorepo. Esta decisión permite:
+* **Código compartido:** Uso de librerías comunes (`shared-dto`, `auth-guard`, `database`) para garantizar la consistencia de los datos.
+* **Escalabilidad:** Cada microservicio (`auth`, `document`, `gateway`) puede escalar de forma independiente según la carga.
+
+<img src="./uml/image.png" alt="MDN" />
+
+## 2. Implementación de BFF (Backend For Frontend)
+El **Gateway** actúa como un punto de entrada único.
+* **Simplificación para el cliente:** El frontend solo conoce una URL.
+* **Seguridad:** El Gateway valida los tokens JWT antes de permitir que la petición llegue a los microservicios internos.
+
+## 3. Almacenamiento Seguro con MinIO (S3)
+En lugar de almacenar archivos en el sistema de archivos local, se optó por un **Object Storage**.
+* **URLs Firmadas:** Se cumple el requisito 3.3 mediante la generación de URLs temporales que expiran en 5 minutos, garantizando que los documentos clínicos nunca sean públicos.
+* **Desacoplamiento:** Los archivos están separados de la base de datos de metadatos.
+
+## 4. Seguridad y Validación de Datos
+* **Hashing con Bcrypt:** Las contraseñas (incluyendo las temporales) nunca se guardan en texto plano.
+* **Validación en múltiples capas:**
+    * **DTOs:** Uso de `class-validator` y `class-transformer` para validar tipos de datos en la entrada.
+    * **Enums:** Implementación de tipos estrictos para documentos (`Concepto médico`, `Paraclínicos`, `Exámenes complementarios`) para evitar datos basura.
+* **Validación de Propiedad:** El sistema verifica que el `patient_id` del token JWT coincida con el dueño del documento solicitado antes de permitir la descarga.
+
+## 5. Base de Datos Relacional (PostgreSQL)
+Se utilizó PostgreSQL debido a su robustez y soporte para tipos de datos complejos:
+* **UUID:** Uso de identificadores universales únicos para evitar la enumeración de recursos.
+* **JSONB:** El campo `metadata` de los documentos utiliza JSON binario para permitir flexibilidad en los datos clínicos sin sacrificar rendimiento.
