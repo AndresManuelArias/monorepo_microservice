@@ -1,11 +1,11 @@
 
-## create docker
+## Create docker
 ```sh
 cd medical
 docker compose up -d
 ```
 
-## rum proyect
+## Run proyect
 ```sh
 cd medical
 npx nx run-many --target=serve
@@ -156,3 +156,11 @@ And join the Nx community:
 - [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
 - [Our Youtube channel](https://www.youtube.com/@nxdevtools)
 - [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+
+
+testing
+```sh
+npx nx test auth --skip-nx-cache
+npx nx test gateway --skip-nx-cache
+
+``
