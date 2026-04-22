@@ -46,7 +46,7 @@ export class DocumentsService {
     const fileName = `${Date.now()}-${file.originalname}`;
 
     try {
-      // 1. Subir el archivo físico a MinIO
+
       await this.s3Client.send(
         new PutObjectCommand({
           Bucket: this.BUCKET_NAME,
@@ -56,11 +56,9 @@ export class DocumentsService {
         }),
       );
 
-      // 2. Guardar el registro en PostgreSQL
+
       const newDoc = this.documentRepo.create({
-        patient_id: dto.patient_id,
-        type: dto.type,
-        metadata: typeof dto.metadata === 'string' ? JSON.parse(dto.metadata) : dto.metadata,
+        ...dto,
         file_url: fileName,
         state: 'active',
       });

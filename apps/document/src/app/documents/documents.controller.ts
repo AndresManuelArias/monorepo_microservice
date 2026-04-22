@@ -50,7 +50,7 @@ export class DocumentsController {
         metadata: { 
           type: 'string', 
           description: 'JSON con información extra', 
-          example: '{"laboratorio": "Sura", "prioridad": "alta"}' 
+          example: '{"laboratorio": "laboratorio", "prioridad": "alta"}' 
         },
       },
     },
