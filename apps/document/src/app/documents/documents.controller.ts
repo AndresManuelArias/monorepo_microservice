@@ -1,6 +1,6 @@
-import { Controller, Post, Body, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Post, Body, UseInterceptors, UploadedFile, Get, Param, Request } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { ApiConsumes, ApiBody,ApiOperation } from '@nestjs/swagger';
 import { DocumentsService } from './documents.service';
 import { CreateDocumentDto } from '@medical/shared-dto';
 
@@ -9,6 +9,12 @@ import { CreateDocumentDto } from '@medical/shared-dto';
 export class DocumentsController {
   constructor(private readonly documentsService: DocumentsService) {}
 
+  @Get(':id/download')
+  @ApiOperation({ summary: 'Obtener URL segura de descarga' })
+  async download(@Param('id') id: string, @Request() req) {
+    // req.user viene del payload del JWT que configuramos en el login
+    return this.documentsService.getSecureDownloadUrl(id, req.user.sub);
+  }
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
