@@ -51,7 +51,12 @@ La seguridad es el eje central, considerando que manejamos datos médicos:
 * **Validación de Capas:**
     * **Tipado Estricto:** Uso de `class-validator` y `class-transformer` en los DTOs para asegurar que solo entre data limpia al sistema.
     * **Enums Médicos:** Definición de tipos estrictos para documentos (`Concepto médico`, `Paraclínicos`, etc.) para evitar inconsistencias.
-* **Validación de Propiedad:** El sistema no solo verifica que el usuario esté logueado, sino
+* **Validación de Propiedad:** El sistema no solo verifica que el usuario esté logueado, sino que cruza el `patient_id` del token con el dueño del recurso solicitado para prevenir accesos cruzados.
+
+## 5. Persistencia con PostgreSQL
+Elegí PostgreSQL por su robustez y su excelente soporte para datos complejos:
+* **UUIDs:** Implementé identificadores universales para evitar la enumeración de recursos y mejorar la seguridad por oscuridad en las URLs.
+* **Flexibilidad con JSONB:** Utilicé el tipo de datos `JSONB` para el campo de metadatos de los documentos. Esto permite almacenar información clínica variable sin comprometer el rendimiento de las consultas.
 # Medical
 
 <a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
