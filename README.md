@@ -172,6 +172,7 @@ And join the Nx community:
 
 ## Testing
 ```sh
+npx nx test document --skip-nx-cache
 npx nx test auth --skip-nx-cache
 npx nx test gateway --skip-nx-cache
 
