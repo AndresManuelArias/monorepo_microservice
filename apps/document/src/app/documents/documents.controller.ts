@@ -21,6 +21,39 @@ import { JwtAuthGuard } from '@medical/auth-guard';
 export class DocumentsController {
   constructor(private readonly documentsService: DocumentsService) {}
 
+    @UseGuards(AuthGuard('jwt'))
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Subir un nuevo documento PDF' })
+  @ApiBody({
+    description: 'Archivo PDF y metadatos del documento',
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+          description: 'Archivo PDF del examen o concepto médico',
+        },
+        patient_id: { type: 'string', description: 'UUID del paciente' },
+        type: { type: 'string', description: 'Tipo de documento (ej: Paraclínico)', example: 'Paraclínico' },
+        metadata: { 
+          type: 'string', 
+          description: 'JSON con información extra', 
+          example: '{"laboratorio": "laboratorio", "prioridad": "alta"}' 
+        },
+      },
+    },
+  })
+  @ApiResponse({ status: 201, description: 'Documento subido y registrado exitosamente.' })
+  @ApiResponse({ status: 400, description: 'Datos inválidos o formato de archivo no soportado.' })
+  async uploadDocument(
+    @Body() body: CreateDocumentDto,
+    @UploadedFile() file: any 
+  ) {
+    return this.documentsService.uploadAndCreate(body, file);
+  }
   @Get(':id')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ 
@@ -65,37 +98,5 @@ export class DocumentsController {
     return this.documentsService.getSecureDownloadUrl(id, req.user.sub);
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
-  @ApiConsumes('multipart/form-data')
-  @ApiOperation({ summary: 'Subir un nuevo documento PDF' })
-  @ApiBody({
-    description: 'Archivo PDF y metadatos del documento',
-    schema: {
-      type: 'object',
-      properties: {
-        file: {
-          type: 'string',
-          format: 'binary',
-          description: 'Archivo PDF del examen o concepto médico',
-        },
-        patient_id: { type: 'string', description: 'UUID del paciente' },
-        type: { type: 'string', description: 'Tipo de documento (ej: Paraclínico)', example: 'Paraclínico' },
-        metadata: { 
-          type: 'string', 
-          description: 'JSON con información extra', 
-          example: '{"laboratorio": "laboratorio", "prioridad": "alta"}' 
-        },
-      },
-    },
-  })
-  @ApiResponse({ status: 201, description: 'Documento subido y registrado exitosamente.' })
-  @ApiResponse({ status: 400, description: 'Datos inválidos o formato de archivo no soportado.' })
-  async uploadDocument(
-    @Body() body: CreateDocumentDto,
-    @UploadedFile() file: any 
-  ) {
-    return this.documentsService.uploadAndCreate(body, file);
-  }
+
 }
