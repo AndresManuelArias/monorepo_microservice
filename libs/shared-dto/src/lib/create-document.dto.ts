@@ -9,7 +9,7 @@ export class CreateDocumentDto {
   @IsNotEmpty()
   patient_id: string;
 
-  @ApiProperty({ example: 'Paraclínico' })
+  @ApiProperty({ example: 'Paraclínicos' })
   @IsString()
   @IsNotEmpty()
   type: string;
