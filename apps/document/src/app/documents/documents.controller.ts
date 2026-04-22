@@ -21,7 +21,7 @@ import { JwtAuthGuard } from '@medical/auth-guard';
 export class DocumentsController {
   constructor(private readonly documentsService: DocumentsService) {}
 
-    @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'))
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
@@ -54,6 +54,20 @@ export class DocumentsController {
   ) {
     return this.documentsService.uploadAndCreate(body, file);
   }
+  @UseGuards(AuthGuard('jwt'))
+  @Get(':id/download')
+  @ApiOperation({ 
+    summary: 'Obtener URL segura de descarga', 
+    description: 'Genera una URL firmada de MinIO que expira en 5 minutos. Solo el propietario del documento puede acceder.' 
+  })
+  @ApiParam({ name: 'id', description: 'UUID del documento clínico', example: '550e8400-e29b-41d4-a716-446655440000' })
+  @ApiResponse({ status: 200, description: 'URL generada exitosamente.' })
+  @ApiResponse({ status: 403, description: 'Acceso denegado: El documento no pertenece al paciente autenticado.' })
+  @ApiResponse({ status: 404, description: 'Documento no encontrado.' })
+  async download(@Param('id') id: string, @Request() req) {
+    console.log(req.user);
+    return this.documentsService.getSecureDownloadUrl(id, req.user.sub);
+  }
   @Get(':id')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ 
@@ -83,20 +97,7 @@ export class DocumentsController {
     return this.documentsService.findAllByPatient(patientId);
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Get(':id/download')
-  @ApiOperation({ 
-    summary: 'Obtener URL segura de descarga', 
-    description: 'Genera una URL firmada de MinIO que expira en 5 minutos. Solo el propietario del documento puede acceder.' 
-  })
-  @ApiParam({ name: 'id', description: 'UUID del documento clínico', example: '550e8400-e29b-41d4-a716-446655440000' })
-  @ApiResponse({ status: 200, description: 'URL generada exitosamente.' })
-  @ApiResponse({ status: 403, description: 'Acceso denegado: El documento no pertenece al paciente autenticado.' })
-  @ApiResponse({ status: 404, description: 'Documento no encontrado.' })
-  async download(@Param('id') id: string, @Request() req) {
-    console.log(req.user);
-    return this.documentsService.getSecureDownloadUrl(id, req.user.sub);
-  }
+
 
 
 }
