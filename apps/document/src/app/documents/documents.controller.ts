@@ -21,6 +21,19 @@ import { JwtAuthGuard } from '@medical/auth-guard';
 export class DocumentsController {
   constructor(private readonly documentsService: DocumentsService) {}
 
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ 
+    summary: 'Consultar detalle de un documento específico',
+    description: 'Retorna la información completa de un documento siempre que pertenezca al paciente autenticado.' 
+  })
+  @ApiParam({ name: 'id', description: 'UUID del documento', example: '550e8400-e29b-41d4-a716-446655440000' })
+  @ApiResponse({ status: 200, description: 'Detalle del documento obtenido.', type: ClinicalDocument })
+  @ApiResponse({ status: 403, description: 'Acceso denegado.' })
+  @ApiResponse({ status: 404, description: 'Documento no encontrado.' })
+  async findOne(@Param('id') id: string, @Request() req) {
+    return this.documentsService.findOne(id, req.user.sub);
+  }
   @Get()
   @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ 

@@ -80,4 +80,20 @@ export class DocumentsService {
       }
     });
   }
+
+  async findOne(docId: string, patientId: string): Promise<ClinicalDocument> {
+    const document = await this.documentRepo.findOne({
+      where: { id: docId }
+    });
+
+    if (!document) {
+      throw new NotFoundException('El documento solicitado no existe');
+    }
+
+    if (document.patient_id !== patientId) {
+      throw new ForbiddenException('No tienes permisos para ver el detalle de este documento');
+    }
+
+    return document;
+  }
 }
