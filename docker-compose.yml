@@ -27,8 +27,8 @@ services:
       image: quay.io/minio/minio
       container_name: medical_storage
       ports:
-        - "9000:9000" # Puerto para la API (S3)
-        - "9001:9001" # Puerto para la Consola Web
+        - "9000:9000" 
+        - "9001:9001"
       environment:
         MINIO_ROOT_USER: admin
         MINIO_ROOT_PASSWORD: medical_password
