@@ -160,7 +160,7 @@ And join the Nx community:
 - [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
 
 
-testing
+## Testing
 ```sh
 npx nx test auth --skip-nx-cache
 npx nx test gateway --skip-nx-cache
