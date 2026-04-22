@@ -14,11 +14,10 @@ export class CreateDocumentDto {
   @IsNotEmpty()
   type: string;
 
-  @ApiProperty({ example: { laboratorio: 'Sura', prioridad: 'alta' } })
+  @ApiProperty({ example: { laboratorio: 'laboratorio', prioridad: 'alta' } })
   @IsObject()
   @IsOptional()
   @Transform(({ value }) => {
-    // Si el valor llega como string (común en multipart/form-data), lo parseamos
     if (typeof value === 'string') {
       try {
         return JSON.parse(value);

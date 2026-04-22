@@ -6,6 +6,12 @@ import { ClinicalDocument } from '@medical/database';
 import { CreateDocumentDto } from '@medical/shared-dto';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
+interface MulterFile {
+  originalname: string;
+  mimetype: string;
+  buffer: Buffer;
+}
+
 @Injectable()
 export class DocumentsService {
   private s3Client = new S3Client({
@@ -42,7 +48,7 @@ export class DocumentsService {
     const url = await getSignedUrl(this.s3Client, command, { expiresIn: 300 });
     return { download_url: url };
   }
-  async uploadAndCreate(dto: CreateDocumentDto, file: Express.Multer.File) {
+  async uploadAndCreate(dto: CreateDocumentDto, file: MulterFile) {
     const fileName = `${Date.now()}-${file.originalname}`;
 
     try {
