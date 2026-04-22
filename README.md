@@ -1,13 +1,13 @@
 
 ## Create docker
 ```sh
-cd medical
+cd monorepo_microservice
 docker compose up -d
 ```
 
 ## Run proyect
 ```sh
-cd medical
+cd monorepo_microservice
 npm install
 npx nx run-many --target=serve
 ```
