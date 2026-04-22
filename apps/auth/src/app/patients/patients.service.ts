@@ -33,7 +33,11 @@ export class PatientsService {
       passwordHash: hashedPassword,
     });
 
-    return await this.patientRepository.save(newPatient);
+    const patient =  await this.patientRepository.save(newPatient);
+    return { cedula:patient.cedula, 
+      id:patient.id,  
+      email:patient.email
+    } as Patient;
   }
   async findAll(): Promise<Patient[]> {
   return await this.patientRepository.find({
