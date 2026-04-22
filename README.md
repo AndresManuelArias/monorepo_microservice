@@ -100,13 +100,25 @@ And join the Nx community:
 - [Our Youtube channel](https://www.youtube.com/@nxdevtools)
 - [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
 
-
 ## create docker
 ```sh
-
+cd medical
 docker compose up -d
-``
+```
+
+## rum proyect
+```sh
+cd medical
+npx nx run-many --target=serve
+```
 
 ##swagger documentation
 
-http://localhost:3001/docs
+gateway
+<a href="http://localhost:3000/docs"> http://localhost:3000/docs </a>
+
+auth
+<a href="http://localhost:3001/docs"> http://localhost:3001/docs </a>
+
+document
+<a href="http://localhost:3002/docs"> http://localhost:3002/docs </a>
