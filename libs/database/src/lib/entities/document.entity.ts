@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
+import { DocumentType } from '../enums/document-type.enum';
 
 @Entity('documents')
 export class ClinicalDocument {
@@ -11,7 +12,7 @@ export class ClinicalDocument {
   @Column({
     type: 'enum',
     enum: DocumentType,
-    default: DocumentType.PARACLINICOS, // Opcional: valor por defecto
+    default: DocumentType.PARACLINICOS,
   })
   type: string; 
 
